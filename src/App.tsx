@@ -1,30 +1,16 @@
-import {
-    Box,
-    Button,
-    createStyles,
-    Divider,
-    Grid,
-    GridSize,
-    makeStyles,
-    Paper,
-    Step,
-    StepLabel,
-    Stepper,
-    Theme,
-    Tooltip,
-    useTheme,
-    withStyles,
-} from "@material-ui/core";
+import * as MuiCore from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import React from "react";
 import "./App.css";
 import CustomAppBar from "./components/customAppBar";
 
-const useStyles = makeStyles({
+const useStyles = MuiCore.makeStyles({
     root: {
         flexGrow: 1,
+        justifyItems: "center",
     },
+
     paper: {
         height: 70,
         width: "100%",
@@ -37,15 +23,18 @@ const useStyles = makeStyles({
         width: "100%",
         background: "#ccc",
     },
-    menuButton: {},
+    menuButton: {
+        display: "flex",
+    },
+
     title: {
+        justifySelf: "center",
         flexGrow: 1,
     },
 });
 
-const useStepButton = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {},
+const useStepButton = MuiCore.makeStyles((theme: MuiCore.Theme) =>
+    MuiCore.createStyles({
         alternativeLabel: {
             flex: 0,
             position: "static",
@@ -56,7 +45,7 @@ const useStepButton = makeStyles((theme: Theme) =>
     })
 );
 
-const HtmlTooltip = withStyles((theme: Theme) => ({
+const HtmlTooltip = MuiCore.withStyles((theme: MuiCore.Theme) => ({
     tooltip: {
         backgroundColor: "#fff",
         color: "rgba(0, 0, 0, 0.87)",
@@ -68,17 +57,17 @@ const HtmlTooltip = withStyles((theme: Theme) => ({
             backgroundColor: "#dadde9",
         },
     },
-}))(Tooltip);
+}))(MuiCore.Tooltip);
 
 export interface LayoutI {
-    gridSize: GridSize[][];
+    gridSize: MuiCore.GridSize[][];
     page: number;
 }
 
 function App() {
     const classes = useStyles();
     const [layout, setLayout] = React.useState<LayoutI[]>([{ gridSize: [[6, 6]], page: 0 }]);
-    const theme = useTheme();
+    const theme = MuiCore.useTheme();
 
     const classesStepButton = useStepButton();
     const [activeStep, setActiveStep] = React.useState(0);
@@ -103,51 +92,64 @@ function App() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    function handleSetLayout(newGridSize: GridSize[]) {
+    function handleSetLayout(newGridSize: MuiCore.GridSize[]) {
         setLayout((prev) => [...prev.map((item) => (item.page === activeStep ? { ...item, gridSize: [...item.gridSize, newGridSize] } : item))]);
     }
 
     function handleDeleteGrid(indexRemove: number) {
-        setLayout((prev) => [...prev.map((item) => ({ ...item, gridSize: [...item.gridSize.filter((xs, index) => index !== indexRemove)] }))]);
+        setLayout((prev) => [
+            ...prev.map((item) => ({
+                ...item,
+                gridSize: [...item.gridSize.filter((xs, index) => index !== indexRemove)],
+            })),
+        ]);
     }
 
     return (
         <div style={{ backgroundColor: "#fff", height: "100vh" }}>
             <CustomAppBar onSetLayout={handleSetLayout} />
-            <Button onClick={() => setLayout((prev) => [...prev, { gridSize: [[12]], page: layout.length }])}>Add new layout</Button>
-            <Grid
+
+            <MuiCore.Button onClick={() => setLayout((prev) => [...prev, { gridSize: [[12]], page: layout.length }])}>Add new layout</MuiCore.Button>
+            <MuiCore.Grid
                 container
                 spacing={1}
-                style={{ display: "flex", flexFlow: "row", justifyContent: "center", alignItems: "center", padding: 10, minHeight: 30 }}
+                style={{
+                    display: "flex",
+                    flexFlow: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 10,
+                    minHeight: 30,
+                }}
             >
-                <Box>
-                    <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                <MuiCore.Box>
+                    <MuiCore.Button size="small" onClick={handleBack} disabled={activeStep === 0}>
                         {theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-                    </Button>
-                </Box>
-                <Grid container spacing={1}>
+                    </MuiCore.Button>
+                </MuiCore.Box>
+                <MuiCore.Grid container spacing={1}>
                     {layout[activeStep].gridSize.map((item, index) => {
                         return item.map((xs, j) => (
-                            <Grid key={index} item xs={xs} onClick={() => handleDeleteGrid(index)} style={{ cursor: "pointer" }}>
-                                <Paper className={classes.paper} variant="outlined" />
-                            </Grid>
+                            <MuiCore.Grid key={index} item xs={xs} onClick={() => handleDeleteGrid(index)} style={{ cursor: "pointer" }}>
+                                <MuiCore.Paper className={classes.paper} variant="outlined" />
+                            </MuiCore.Grid>
                         ));
                     })}
-                </Grid>
+                </MuiCore.Grid>
 
-                <Box>
-                    <Button size="small" onClick={handleNext} disabled={activeStep === layout.length - 1}>
+                <MuiCore.Box>
+                    <MuiCore.Button size="small" onClick={handleNext} disabled={activeStep === layout.length - 1}>
                         {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-                    </Button>
-                </Box>
-            </Grid>
+                    </MuiCore.Button>
+                </MuiCore.Box>
+            </MuiCore.Grid>
 
-            <Grid item xs={12} className="hidden-scroll">
-                <Stepper alternativeLabel nonLinear activeStep={activeStep} connector={<></>} style={{ justifyContent: "center", margin: "0 auto" }}>
+            <MuiCore.Grid item xs={12} className="hidden-scroll">
+                <MuiCore.Stepper alternativeLabel nonLinear activeStep={activeStep} connector={<></>} style={{ justifyContent: "center", margin: "0 auto" }}>
                     {layout.map((label, index) => {
                         return (
-                            <Step key={index} classes={classesStepButton}>
-                                <StepLabel
+                            <MuiCore.Step key={index} classes={classesStepButton}>
+                                <MuiCore.StepLabel
                                     StepIconComponent={() => (
                                         <div
                                             style={{
@@ -160,17 +162,34 @@ function App() {
                                     )}
                                     onClick={handleStep(index)}
                                 />
-                            </Step>
+                            </MuiCore.Step>
                         );
                     })}
-                </Stepper>
-            </Grid>
-
-            <Grid item xs={12} style={{ display: "flex", flexFlow: "row", alignItems: "center", justifyContent: "center" }}>
-                <Box style={{ display: "flex" }}>
-                    <Divider flexItem orientation="horizontal" style={{ height: "1.4px", width: 200, marginLeft: 5, marginRight: 5 }} />
-                </Box>
-            </Grid>
+                </MuiCore.Stepper>
+            </MuiCore.Grid>
+            <MuiCore.Grid
+                item
+                xs={12}
+                style={{
+                    display: "flex",
+                    flexFlow: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                <MuiCore.Box style={{ display: "flex" }}>
+                    <MuiCore.Divider
+                        flexItem
+                        orientation="horizontal"
+                        style={{
+                            height: "1.4px",
+                            width: 200,
+                            marginLeft: 5,
+                            marginRight: 5,
+                        }}
+                    />
+                </MuiCore.Box>
+            </MuiCore.Grid>
         </div>
     );
 }

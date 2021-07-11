@@ -1,21 +1,21 @@
 body {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
 }
 
 .hidden-scroll {
-    -ms-overflow-style: none !important;
-    scrollbar-width: none !important;
-    margin-top: 10px;
-    align-items: center;
-    overflow: auto;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    max-height: 20px;
+	-ms-overflow-style: none !important;
+	scrollbar-width: none !important;
+	margin-top: 10px;
+	align-items: center;
+	overflow: auto;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	max-height: 20px;
 }
 
 .hidden-scroll::-webkit-scrollbar {
-    display: none !important;
+	display: none !important;
 }
